@@ -228,26 +228,24 @@ Administrativos.
 
 \subsection{Capturas del sistema}
 
+Las siguientes capturas, incluidas en la carpeta \texttt{Recursos/},
+muestran el sistema en funcionamiento durante distintas operaciones.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{../Recursos/interaccion-app1.png}
-    \caption{Menú principal y listado de alumnos.}
     \label{fig:app1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{../Recursos/interaccion-app3.png}
-    \caption{Inscripción de un alumno a una materia: selección por lista
-    numerada.}
     \label{fig:app3}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{../Recursos/interaccion-app5.png}
-    \caption{Carga de nota: el docente selecciona alumno y materia de
-    listas desplegables e ingresa la nota.}
     \label{fig:app5}
 \end{figure}
 
@@ -762,34 +760,10 @@ conectan entre sí.
 
 \subsection{Contenido de la carpeta \texttt{Recursos/}}
 
-\begin{table}[H]
-    \centering
-    \begin{tabularx}{0.92\textwidth}{l X}
-        \toprule
-        \textbf{Archivo} & \textbf{Contenido} \\
-        \midrule
-        \texttt{demo.mov}
-            & Video: demostración de la aplicación funcionando. \\
-        \texttt{demo-codigo-y-estructura.mov}
-            & Video: recorrido por el código fuente y la arquitectura. \\
-        \texttt{estructura.png}
-            & Diagrama de la arquitectura en capas. \\
-        \texttt{interaccion-app1.png}
-            & Captura: menú principal y listado de alumnos. \\
-        \texttt{interaccion-app2.png}
-            & Captura: alta de un nuevo alumno. \\
-        \texttt{interaccion-app3.png}
-            & Captura: inscripción de alumno a materia (selección por lista). \\
-        \texttt{interaccion-app4.png}
-            & Captura: confirmación de inscripción registrada. \\
-        \texttt{interaccion-app5.png}
-            & Captura: carga de nota (selección de alumno y materia). \\
-        \texttt{interaccion-app6.png}
-            & Captura: confirmación de nota cargada y menú de docentes. \\
-        \bottomrule
-    \end{tabularx}
-    \caption{Listado del material en \texttt{Recursos/}.}
-\end{table}
+La carpeta \texttt{Recursos/} contiene dos videos demostrativos (en
+formato \texttt{.mov} y \texttt{.mp4}), siete capturas de pantalla
+(\texttt{.png}) y un diagrama de arquitectura. Todo el material está
+disponible junto al código fuente en el repositorio.
 
 % ======================================================================
 % 11. PRUEBAS Y VERIFICACIÓN
@@ -838,24 +812,21 @@ La aplicación listó los alumnos semilla correctamente y salió sin errores.
 El proyecto cumplió los objetivos planteados:
 
 \begin{itemize}
-    \item Se obtuvo un \textbf{sistema de gestión universitaria funcional}
+    \item Se implementó un \textbf{sistema de gestión universitaria}
         en Java~17, con persistencia en SQLite, menú de consola interactivo
         y validación por campo.
-    \item La \textbf{arquitectura en cuatro capas} demostró ser efectiva:
-        el dominio está completamente aislado de JDBC y de la terminal; los
-        servicios de aplicación contienen las reglas de negocio; la
-        infraestructura es intercambiable sin tocar el dominio.
-    \item La aplicación deliberada de los principios \textbf{SOLID} --- en
-        particular SRP, ISP y DIP --- produjo un código con bajo
-        acoplamiento y alta cohesión, donde cada clase tiene un propósito
-        claro.
-    \item El \textbf{esquema de base de datos normalizado} (3NF) con
-        tablas de lookup, restricciones CHECK e índices sobre claves
-        foráneas garantiza integridad referencial y evita datos
-        inconsistentes.
-    \item La \textbf{experiencia de usuario} se mejoró significativamente
-        con listas numeradas desplegables para seleccionar alumnos y
-        materias, eliminando la necesidad de memorizar legajos o códigos.
+    \item La \textbf{arquitectura en cuatro capas} permitió separar el
+        dominio de la infraestructura y de la terminal; los servicios de
+        aplicación contienen las reglas de negocio y la capa de
+        infraestructura se conecta al dominio a través de interfaces.
+    \item Se aplicaron los principios \textbf{SOLID}, en particular SRP,
+        ISP y DIP. Las interfaces de repositorio están segregadas por tipo
+        de entidad y los servicios dependen de abstracciones, no de clases
+        concretas.
+    \item El \textbf{esquema de base de datos} se normalizó con tablas de
+        lookup, restricciones CHECK e índices sobre claves foráneas.
+    \item Las listas numeradas en los menús de inscripción y carga de nota
+        evitan que el usuario tenga que memorizar legajos o códigos.
 \end{itemize}
 
 % ======================================================================
