@@ -1,0 +1,17 @@
+target/
+bin/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+cp.txt
+dependency-reduced-pom.xml
+
+.DS_Store
+*.iml
+.idea/
+.vscode/
+
+.classpath
+.project
+.settings/
