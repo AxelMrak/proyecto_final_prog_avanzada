@@ -90,15 +90,20 @@ public class InputReader {
                 System.out.println("  Error: ingrese un numero de la lista o el valor.");
                 continue;
             }
+            int n;
             try {
-                int n = Integer.parseInt(linea);
-                if (n < 1 || n > valores.size()) {
-                    System.out.println("  Error: numero fuera de rango (1-" + valores.size() + ").");
-                    continue;
-                }
-                return resolver.apply(n);
+                n = Integer.parseInt(linea);
             } catch (NumberFormatException e) {
                 return linea;
+            }
+            if (n < 1 || n > valores.size()) {
+                System.out.println("  Error: numero fuera de rango (1-" + valores.size() + ").");
+                continue;
+            }
+            try {
+                return resolver.apply(n - 1);
+            } catch (RuntimeException e) {
+                System.out.println("  Error: " + e.getMessage());
             }
         }
     }
