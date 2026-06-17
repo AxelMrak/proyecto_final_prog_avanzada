@@ -3,16 +3,11 @@ package universidad.infrastructure.migration;
 import universidad.infrastructure.persistence.ConnectionFactory;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,20 +24,39 @@ public class Migrator {
             for (String archivo : listarArchivos()) {
                 ejecutarArchivo(conn, archivo);
             }
-        } catch (SQLException | IOException | URISyntaxException e) {
+        } catch (SQLException | IOException | java.net.URISyntaxException e) {
             throw new RuntimeException("Fallo la migracion", e);
         }
     }
 
-    private List<String> listarArchivos() throws IOException, URISyntaxException {
+    private List<String> listarArchivos() throws IOException, java.net.URISyntaxException {
         var dir = getClass().getResource(MIGRATION_PATH);
         if (dir == null) {
             throw new IllegalStateException("No se encontro " + MIGRATION_PATH);
         }
         List<String> archivos = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dir.toURI()), "*.sql")) {
-            for (Path path : stream) {
-                archivos.add(path.getFileName().toString());
+        for (URL url : Collections.list(getClass().getClassLoader().getResources(MIGRATION_PATH.substring(1)))) {
+            String protocol = url.getProtocol();
+            if ("file".equals(protocol)) {
+                try (var stream = java.nio.file.Files.newDirectoryStream(
+                        java.nio.file.Paths.get(url.toURI()), "*.sql")) {
+                    stream.forEach(p -> archivos.add(p.getFileName().toString()));
+                }
+            } else if ("jar".equals(protocol)) {
+                String fullPath = url.getPath();
+                int separator = fullPath.indexOf("!/");
+                String jarPath = fullPath.substring(0, separator);
+                String entryPath = fullPath.substring(separator + 2);
+                try (java.util.jar.JarFile jar = new java.util.jar.JarFile(
+                        java.nio.file.Paths.get(new java.net.URI(jarPath)).toFile())) {
+                    java.util.Enumeration<java.util.jar.JarEntry> entries = jar.entries();
+                    while (entries.hasMoreElements()) {
+                        String name = entries.nextElement().getName();
+                        if (name.startsWith(entryPath) && name.endsWith(".sql") && !name.equals(entryPath)) {
+                            archivos.add(name.substring(entryPath.length()));
+                        }
+                    }
+                }
             }
         }
         Collections.sort(archivos);
